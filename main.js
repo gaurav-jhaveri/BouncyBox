@@ -21,6 +21,7 @@ var mainState = {
 
 		// Display the bird on screen
 		this.bird = this.game.add.sprite(100, 245, 'bird');
+		this.bird.anchor.setTo(-0.2, 0.5);
 
 		// Add gravity to the bird to make it fall
 		game.physics.arcade.enable(this.bird);
@@ -45,12 +46,24 @@ var mainState = {
 		if (this.bird.inWorld == false)
 			this.restartGame();
 		game.physics.arcade.overlap(this.bird, this.pipes, this.restartGame, null, this);
+
+		if (this.bird.angle < 20)
+			this.bird.angle += 1;
 	},
 
 	// Make the bird jump
 	jump: function() {
 		// Add a vertical velocity to the bird
 		this.bird.body.velocity.y = -350;
+
+		// Create an animation on the bird
+		var animation = game.add.tween(this.bird);
+
+		// Set the animation to change the angle of the sprite to -20° in 100 milliseconds
+		animation.to({angle: -20}, 100);
+
+		// And start the animation
+		animation.start();
 	},
 
 	// Restart the game
@@ -82,7 +95,7 @@ var mainState = {
 		for (var i = 0; i < 8; i++)
 			if (i != hole && i != hole + 1)
 				this.addOnePipe(400, i * 60 + 10);
-			
+
 		this.score += 1;
 		this.labelScore.text = this.score;
 	},

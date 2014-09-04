@@ -45,7 +45,7 @@ var mainState = {
 		// If the bird is out of the world (too high or too low), call the 'restartGame' function
 		if (this.bird.inWorld == false)
 			this.restartGame();
-		game.physics.arcade.overlap(this.bird, this.pipes, this.restartGame, null, this);
+		game.physics.arcade.overlap(this.bird, this.pipes, this.hitPipe, null, this);
 
 		if (this.bird.angle < 20)
 			this.bird.angle += 1;
@@ -53,6 +53,9 @@ var mainState = {
 
 	// Make the bird jump
 	jump: function() {
+		if (this.bird.alive == false)
+			return;
+
 		// Add a vertical velocity to the bird
 		this.bird.body.velocity.y = -350;
 
@@ -98,6 +101,24 @@ var mainState = {
 
 		this.score += 1;
 		this.labelScore.text = this.score;
+	},
+
+	hitPipe: function () {
+		// If the bird has already hit a pipe, we have nothing to do
+
+		if (this.bird.alive == false)
+			return;
+
+		// Set the alive property of the bird to false
+		this.bird.alive = false;
+
+		// Prevent new pipes from appearing
+		game.time.events.remove(this.timer);
+
+		// Go through all the pipes, and stop their movement
+		this.pipes.forEachAlive(function(p) {
+			p.body.velocity.x = 0;
+		}, this);
 	},
 }
 

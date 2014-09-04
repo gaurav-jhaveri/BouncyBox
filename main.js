@@ -13,6 +13,9 @@ var mainState = {
 
 		// Load the pipe sprite
 		game.load.image('pipe', 'assets/pipe.png');
+
+		// Load the jump audio
+		game.load.audio('jump', 'assets/jump.wav');
 	},
 
 	create: function() {
@@ -30,6 +33,7 @@ var mainState = {
 		// Call the 'jump' function when the spacekey is hit
 		var spaceKey = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
 		spaceKey.onDown.add(this.jump, this);
+		this.jumpSound = game.add.audio('jump');
 
 		this.pipes = game.add.group(); // Create a group
 		this.pipes.enableBody = true;  // Add physics to the group
